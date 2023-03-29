@@ -3,7 +3,6 @@ import {CollectionProp, EntryProps, KeyValueMap, LocaleProps, QueryOptions} from
 import assign from 'lodash/assign'
 import get from 'lodash/get'
 import keys from 'lodash/keys'
-import nodeFetch from 'node-fetch'
 import {
   AuthenticationError,
   AuthorizationError,
@@ -130,7 +129,7 @@ export class ContentfulClient implements IContentfulClient {
     while (true)
   }
 
-  private getFetchClient(): any {
+  private getFetchClient(): typeof fetch {
 
     // return supplied fetch client
     if (this.options.fetch) {
@@ -138,14 +137,7 @@ export class ContentfulClient implements IContentfulClient {
     }
 
     // or browser
-    else if ('fetch' in global) {
-      return fetch
-    }
-
-    // or node-fetch
-    else {
-      return nodeFetch
-    }
+    return fetch
   }
 
   private parseError(errorData: string, headers: Record<string, any>): Error {

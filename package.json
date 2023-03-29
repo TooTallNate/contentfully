@@ -27,8 +27,7 @@
     "dependencies": {
         "contentful": "^9.1.3",
         "contentful-management": "^7.44.2",
-        "lodash": "^4.17.21",
-        "node-fetch": "^2.6.5"
+        "lodash": "^4.17.21"
     },
     "devDependencies": {
         "@jest/test-sequencer": "^27.0.5",
