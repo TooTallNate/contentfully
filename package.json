@@ -25,7 +25,6 @@
         "dev": "tsc -w"
     },
     "dependencies": {
-        "@nascentdigital/scribe": "^0.11.2",
         "contentful": "^9.1.3",
         "contentful-management": "^7.44.2",
         "lodash": "^4.17.21",

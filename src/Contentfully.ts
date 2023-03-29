@@ -1,5 +1,4 @@
 // imports
-import {Scribe} from '@nascentdigital/scribe'
 import {EntryFields, RichTextContent} from 'contentful'
 import {EntryProps, KeyValueMap, QueryOptions as EntryQueryOptions} from 'contentful-management/types'
 import assign from 'lodash/assign'
@@ -39,8 +38,6 @@ export const REQUIRED_QUERY_SELECT: ReadonlyArray<string> = [
   QUERY_SELECT_CREATED_AT,
   QUERY_SELECT_UPDATED_AT
 ]
-const log = Scribe.getLog('contentfully:Contentfully')
-
 
 // types
 export type ContentfullyOptions = {
@@ -92,13 +89,9 @@ export class Contentfully {
     // create query
     const entries = await this.contentfulClient.getEntries<T>(Contentfully.createQuery(query))
 
-    log.debug('parsing Contentful data: ', entries)
-
     // assign multi-locale query
     const locale = get(query, 'locale')
     const multiLocale = locale && locale === '*'
-
-    log.debug('parsing entry collection')
 
     // parse includes
     const links = await this._createLinks(entries, multiLocale, options.mediaTransform)
@@ -153,7 +146,6 @@ export class Contentfully {
 
     // link included assets
     const assets = get(json, 'includes.Asset') || []
-    log.debug(`parsing ${assets.length} assets`)
     for (const asset of assets) {
 
       // TODO: handle non-image assets (e.g. video)
@@ -192,7 +184,6 @@ export class Contentfully {
 
     // link included entries
     const linkedEntries = get(json, 'includes.Entry') || []
-    log.debug(`parsing ${linkedEntries.length} linked entries`)
     for (const entry of linkedEntries) {
       links[entry.sys.id] = {
         _deferred: entry
@@ -201,7 +192,6 @@ export class Contentfully {
 
     // link payload entries
     const mainEntries = get(json, 'items') || []
-    log.debug(`parsing ${mainEntries.length} main entries`)
     for (const entry of mainEntries) {
       links[entry.sys.id] = {
         _deferred: entry
@@ -273,8 +263,6 @@ export class Contentfully {
 
     // bind metadata to model
     this._bindMetadata(entry, model)
-
-    log.debug('parsing entry: ', model._id)
 
     // transform entry fields to model
     for (const [key, value] of Object.entries<any>(entry.fields)) {
